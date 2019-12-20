@@ -14,7 +14,7 @@ Any long-term plans to implement this at scale would surely involve abstracting 
 
 ## Approach
 
-Instances of the `StateMachine` class know how to flow between states, as they are initialized with (1) an initial state (a String) and (2) an object describing the actions that signal transitions between states. Additionally, instances of `StateMachine` have a few helper methods to return available actions and possible next states, given the current state. These assist in populating the UI with helpful information.
+Although this will be specific to React, I've built out a custom `useStateMachine` hook, which abstracts away how to flow between states, as it is invoked with (1) an initial state (a String) and (2) an object describing the actions that signal transitions between states. Additionally, it exports a few helper functions to return available actions and possible next states, given the current state. These assist in populating the UI with helpful information.
 
 ## Example
 
@@ -40,42 +40,58 @@ A snippet from a possible stateFlow object for such a timer is shown below, and 
 
 The above snippet tells the state machine that, when in the `running` state, it should respond to three signals `PAUSE`, `RESET`, and `END` by transitioning to the three states `paused`, `zero`, and `complete`, respectively.
 
-Then the state machine could be invoked with some code like the following.
+Then the state machine could be invoked as follows.
 
 ```js
-const [state, setState] = useState('zero')
+const machine = useStateMachine('zero', {
+    zero: {
+        on: {
+            START: 'running',
+        },
+    },
+    running: {
+        on: {
+            PAUSE: 'paused',
+            RESET: 'zero',
+            END: 'complete',
+        },
+    },
+    paused: {
+        on: {
+            START: 'running',
+            RESET: 'zero',
+        },
+    },
+    complete: {
+        on: {
+            RESET: 'zero',
+        },
+    },
+})
 
 // ...
 
-setState('running')
-
-machine.transition(state, 'PAUSE') // returns 'paused'
+machine.transition('PAUSE') // sets the machine's internal state to 'paused'
 
 // ...
 
 ```
 
-The machine acts kind of like router between states and simply returns a string representation of the state to which the component should transition next. Passing this returned state into `setState` officially transitions the timer component's state in a well-defined manner.
+The machine acts kind of like router between states and simply returns a string representation of the state to which the component should transition next. As such, it behaves quite similarly to React's useState hook.
 
-```js
-setState(machine.transition(state, 'PAUSE'))
-```
-
-Shoving all this into a `handleChangeState` function makes responding to user interactions simple, as it takes care of passing along the component's _current_ state to the machine.
+I'm not sure how to get around the 'too many renders' error of just using `machine.transition(action)` inside of `onClick`, so I've abstracted away the stripping out of the event parameter by defining a `handleChangeState` function like so.
 
 ```js
 const handleChangeState = action => e => setState(machine.transition(state, action))
 ```
 
-Now, one simply calls this `handleChangeState` function on buttons with an action (or signal) parameter to pass along to the machine for processing. The machine, then, returns the next state, and React sets the state as dictated by the machine.
+Now, one simply calls this `handleChangeState` function on buttons with an action (or signal) parameter to change (or not change) the state accordingly.
 
-For example, the button defined by
+For example, the button my be defined as follows.
 
 ```jsx
 <button onClick={ handleChangeState('START') }>Start Timer</button>
 ```
-
-This implementation does feel a little convoluted, but--because this was kind of a proof of concept for me--I'm okay with that for now.
 
 ## So What?
 
@@ -90,12 +106,6 @@ if (!isZero && !isRunning && isPaused) {
 ```
 
 The front-end developer need not bloat her code base with checks for these cases like `isRunning = true` and `isPaused = true` because the state machine simply won't allow those to happen.
-
-## Next Steps and Ponderings
-
-Again, I ignored how convoluted this method felt at first, and now that I have a grasp on this approach, I think future abstractions will feel more natural.
-
-I was torn whether the machine should keep track of state for the component or act more as a router, simply dictating allowed transitions back to React's state-handling capabilities, as it does in this iteration. Seems to work fine, but the other approach feels like it's worth exploring.
 
 ## Demo
 

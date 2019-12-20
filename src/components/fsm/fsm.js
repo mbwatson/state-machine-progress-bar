@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ProgressBar } from '../progress'
-import { Heading } from '../typography'
-import { Divider } from '../layout'
-import { StateList, StateListItem } from './state-list'
+import { States, StatesListItem } from './state-list'
 import { ActionButtonGroup, ActionButton } from './action-buttons'
-
-Array.prototype.removeDuplicates = function() {
-    return Array.from(new Set(this))
-}
+import { useStateMachine } from '../../hooks'
 
 const MachineWrapper = styled.div(
     ({ theme }) => `
@@ -19,51 +14,15 @@ const MachineWrapper = styled.div(
         width: 90%;
         max-width: 768px;
         margin: auto;
-        padding: ${ theme.spacing };
+        // padding: ${ theme.spacing };
     `
 )
-
-/**
-* StateMachine
-* @initalState  String, should be top-level key in `flow` parameter, described next
-* @flow         Object describing flow between states, e.g., { state1: { on: { actiona: state2 } }, state2: { on: { actionb: state1 } } }
-*/
-class StateMachine {
-    constructor(initialState, flow) {
-        this.state = initialState
-        this.flow = flow
-        this.states = Object.entries(this.flow).map(([state, flow]) => state).removeDuplicates()
-        this.actions = Object.values(this.flow).reduce((allActions, s) => {
-            return allActions.concat(Object.entries(s.on).map(([action, nextState]) => action)).removeDuplicates()
-        }, [])
-    }
-
-    availableStates(currentState) {
-        const thisStateFlow = Object.entries(this.flow[currentState].on).map(([signal, nextState]) => nextState)
-        return thisStateFlow.removeDuplicates()
-    }
-
-    availableActions(currentState) {
-        const thisStateFlow = Object.entries(this.flow[currentState].on).map(([signal, nextState]) => signal)
-        return thisStateFlow.removeDuplicates()
-    }
-
-    transition(currentState, action) {
-        if (this.availableStates !== []) {
-            if (this.flow[currentState].hasOwnProperty('on') && this.flow[currentState].on.hasOwnProperty(action)) {
-                console.log(`transition: ${ currentState } -> ${ this.flow[currentState].on[action] }`)
-                return this.flow[currentState].on[action]
-            }
-        }
-        return currentState
-    }
-}
 
 const INTERVAL = 25 // in milliseconds
 const DISABLE_UNAVAILABLE_ACTIONS = true
 
 export const Fsm = props => {
-    const machine = new StateMachine('zero', {
+    const machine = useStateMachine('zero', {
         zero: {
             on: {
                 START: 'running',
@@ -88,17 +47,16 @@ export const Fsm = props => {
             },
         },
     })
-    const [state, setState] = useState(machine.state)
     const [progress, setProgress] = useState(0)
 
     useEffect(() => {
-        switch (state) {
+        switch (machine.state) {
             case 'zero':
                 setProgress(0)
                 break
             case 'running':
                 if (progress === 100) {
-                    setState(machine.transition(state, 'END'))
+                    machine.transition('END')
                     return
                 }
                 const interval = setInterval(() => {
@@ -111,24 +69,22 @@ export const Fsm = props => {
             default: // 'paused'
                 return
         }
-    }, [state, progress])
+    }, [machine, progress])
 
-    const handleChangeState = action => e => setState(machine.transition(state, action))
+    const handleChangeState = action => e => machine.transition(action)
 
     return (
         <MachineWrapper>
             <ProgressBar percentage={ progress } />
 
-            <Heading>Actions</Heading>
             <ActionButtonGroup>
                 {
                     machine.actions.map(action => {
-                        // console.log(`available actions: ${ machine.availableActions(state).join(', ') }\navailable states: ${ machine.availableStates(state).join(', ') }`)
                         return (
                             <ActionButton
                                 key={ action }
                                 onClick={ handleChangeState(action) }
-                                disabled={ DISABLE_UNAVAILABLE_ACTIONS && !machine.availableActions(state).includes(action) }
+                                disabled={ DISABLE_UNAVAILABLE_ACTIONS && !machine.availableActions.includes(action) }
                             >
                                 { action }
                             </ActionButton>
@@ -137,16 +93,13 @@ export const Fsm = props => {
                 }
             </ActionButtonGroup>
 
-            <Divider />
-
-            <Heading>States</Heading>
-            <StateList>
+            <States>
                 {
                     Object.keys(machine.flow).map(s => (
-                        <StateListItem key={ s } active={ state === s }>{ s }</StateListItem>
+                        <StatesListItem key={ s } active={ machine.state === s }>{ s }</StatesListItem>
                     ))
                 }   
-            </StateList>
+            </States>
 
         </MachineWrapper>
     )

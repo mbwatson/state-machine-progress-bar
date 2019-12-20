@@ -4,19 +4,16 @@ import styled from 'styled-components'
 
 const ProgressBarWrapper = styled.div(
     ({ theme, percentage, width = '100%' }) => `
-        border: 1px solid ${ theme.palette.moss };
-        // width: ${ width };
+        border-bottom: 1px solid ${ theme.palette.moss };
         position: relative;
-        height: 10px;
-        margin: ${ theme.spacing } calc(${ theme.spacing } / 2);
+        height: ${ theme.spacing };
         &::before {
             content: "${ percentage }%";
             position: absolute;
-            bottom: 100%;
-            left: calc(${ percentage }% / 2);
+            top: calc(100% + 10px);
+            left: 50%;
             transform: translateX(-50%);
-            color: ${ theme.palette.moss };
-            font-weight: bold;
+            color: ${ theme.palette.silver };
         }
         &::after {
             content: "";
