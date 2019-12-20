@@ -27,7 +27,7 @@ const StateList = styled.div(
         display: flex;
         flex-direction: column;
         justify-content: center;
-        @media (min-width: 500px) {
+        @media (min-width: 768px) {
             flex-direction: row;
         }
     `
@@ -60,7 +60,7 @@ const ActionButtons = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    @media (min-width: 600px) {
+    @media (min-width: 768px) {
         flex-direction: row;
     }
 `
@@ -82,6 +82,12 @@ const Divider = styled.div(
         width: 100%;
         border-bottom: 1px solid ${ theme.palette.silver };
         margin: ${ theme.spacing } auto;
+    `
+)
+
+const Heading = styled.h3(
+    ({ theme }) => `
+        color: ${ theme.palette.silver };
     `
 )
 
@@ -181,6 +187,7 @@ export const Fsm = props => {
         <MachineWrapper>
             <ProgressBar percentage={ progress } />
 
+            <Heading>States</Heading>
             <StateList>
                 {
                     Object.keys(machine.flow).map(s => (
@@ -191,6 +198,7 @@ export const Fsm = props => {
 
             <Divider />
 
+            <Heading>Actions</Heading>
             <ActionButtons>
                 {
                     machine.actions.map(action => {
