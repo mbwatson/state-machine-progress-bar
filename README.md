@@ -1,68 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Finite State Machine
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+Good UI design aligns user expectations with application outcomes. Controlling the flow of state in UI components helps prevent unexpected results. This is a first stab at thinking about writing finite-state-machine-powered UI components.
 
-### `yarn start`
+I have built a quick, little timer/progress bar component that can be controlled through buttons in [React](https://reactjs.com).
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Purpose
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Although state machine JavaScript libraries exist, the aim of this small project is to understand controlling the structure and flow of state in UI components without an external library.
 
-### `yarn test`
+Any long-term plans to implement this at scale would surely involve abstracting my state machine concept into its own library, but for this trial, it lives in the file in which the component that uses it is defined.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Approach
 
-### `yarn build`
+Instances of the class `StateMachine` know how to flow between states, as they are initialized with an initial state (String) and an object describing the actions that signal transitions between states. Additionally, it has a few methods to assist in populating the UI with information about available states and actions based on the current state.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Example
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Consider a timer UI component that may have four states
 
-### `yarn eject`
+`running`, `paused', `zero', and `complete`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+and four actions
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`START`, `PAUSE`, `RESET`, and `FINISH`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+A snippet from a possible stateFlow object for this timer shown below illustrates how transitions may occur from the `running` state.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```js
+    running: {
+        on: {
+            PAUSE: 'paused',
+            RESET: 'zero',
+            FINISH: 'complete',
+        },
+    },
+```
 
-## Learn More
+The above snippet tells the state machine that, when in the `running` state, it should respond to three signals `PAUSE`, `RESET`, and `FINISH` by transitioning to the three states `paused', `zero', and `complete`, respectively.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This prevents from ever responding to, say, `START`, while the timer has already started running. (Of course, there may be instances in which it would make sense to respond to that signal.)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The idea is that controlling state flow in this way prevents ever having to think about impossible states. If these four states were all stored as booleans, this would potentially allow our UI component to have boolean values that describe one of $2^4 = 16$ possible states, many of which are senseless, such as simultaneously having `running = true` and `paused = true`.
 
-### Code Splitting
+## Demo
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+https://mbwatson.github.io/state-machine-progress-bar
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
