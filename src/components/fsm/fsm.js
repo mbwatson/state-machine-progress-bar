@@ -135,7 +135,7 @@ export const Fsm = props => {
             on: {
                 PAUSE: 'paused',
                 RESET: 'zero',
-                FINISH: 'complete',
+                END: 'complete',
             },
         },
         paused: {
@@ -160,7 +160,7 @@ export const Fsm = props => {
                 break
             case 'running':
                 if (progress === 100) {
-                    setState(machine.transition(state, 'FINISH'))
+                    setState(machine.transition(state, 'END'))
                     return
                 }
                 const interval = setInterval(() => {
