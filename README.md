@@ -14,7 +14,16 @@ Any long-term plans to implement this at scale would surely involve abstracting 
 
 ## Approach
 
-Although this will be specific to React, I've built out a custom `useStateMachine` hook, which abstracts away how to flow between states, as it is invoked with (1) an initial state (a String) and (2) an object describing the actions that signal transitions between states. Additionally, it exports a few helper functions to return available actions and possible next states, given the current state. These assist in populating the UI with helpful information.
+Although this will be specific to React, I've built out a custom `useStateMachine` hook, which abstracts away how to flow between states, as it is invoked with (1) an initial state (a String) and (2) an object describing the actions that signal transitions between states.
+
+Additionally, the `useStateMachine` hook exports a few helper functions to return available actions and possible next states, given the current state. These assist in populating the UI with helpful information. All exports are listed here for reference.
+
+- state: value of the current state
+- flow: original state flow object passed in to initialize the state machine
+- states: all defined states
+- actions: all defined actions
+- availableActions: possible actions, given the current state
+- availableStates: possible next states, given the current state
 
 ## Example
 
