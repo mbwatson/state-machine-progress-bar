@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/state-machine-progress-bar/static/css/main.01ec4fd4.chunk.css",
-    "main.js": "/state-machine-progress-bar/static/js/main.4e4b9c8e.chunk.js",
-    "main.js.map": "/state-machine-progress-bar/static/js/main.4e4b9c8e.chunk.js.map",
-    "runtime-main.js": "/state-machine-progress-bar/static/js/runtime-main.af7f3e7f.js",
-    "runtime-main.js.map": "/state-machine-progress-bar/static/js/runtime-main.af7f3e7f.js.map",
-    "static/js/2.dc98be87.chunk.js": "/state-machine-progress-bar/static/js/2.dc98be87.chunk.js",
-    "static/js/2.dc98be87.chunk.js.map": "/state-machine-progress-bar/static/js/2.dc98be87.chunk.js.map",
-    "index.html": "/state-machine-progress-bar/index.html",
-    "precache-manifest.e300ae44c246108bbaa3f187c54df3aa.js": "/state-machine-progress-bar/precache-manifest.e300ae44c246108bbaa3f187c54df3aa.js",
-    "service-worker.js": "/state-machine-progress-bar/service-worker.js",
-    "static/css/main.01ec4fd4.chunk.css.map": "/state-machine-progress-bar/static/css/main.01ec4fd4.chunk.css.map",
-    "static/js/2.dc98be87.chunk.js.LICENSE": "/state-machine-progress-bar/static/js/2.dc98be87.chunk.js.LICENSE"
+    "main.css": "/use-state-machine-example/static/css/main.01ec4fd4.chunk.css",
+    "main.js": "/use-state-machine-example/static/js/main.c972dd83.chunk.js",
+    "main.js.map": "/use-state-machine-example/static/js/main.c972dd83.chunk.js.map",
+    "runtime-main.js": "/use-state-machine-example/static/js/runtime-main.4982d1a7.js",
+    "runtime-main.js.map": "/use-state-machine-example/static/js/runtime-main.4982d1a7.js.map",
+    "static/js/2.d6f8afb3.chunk.js": "/use-state-machine-example/static/js/2.d6f8afb3.chunk.js",
+    "static/js/2.d6f8afb3.chunk.js.map": "/use-state-machine-example/static/js/2.d6f8afb3.chunk.js.map",
+    "index.html": "/use-state-machine-example/index.html",
+    "precache-manifest.8481db0fedda7a6883c1432986c9e738.js": "/use-state-machine-example/precache-manifest.8481db0fedda7a6883c1432986c9e738.js",
+    "service-worker.js": "/use-state-machine-example/service-worker.js",
+    "static/css/main.01ec4fd4.chunk.css.map": "/use-state-machine-example/static/css/main.01ec4fd4.chunk.css.map",
+    "static/js/2.d6f8afb3.chunk.js.LICENSE": "/use-state-machine-example/static/js/2.d6f8afb3.chunk.js.LICENSE"
   },
   "entrypoints": [
-    "static/js/runtime-main.af7f3e7f.js",
-    "static/js/2.dc98be87.chunk.js",
+    "static/js/runtime-main.4982d1a7.js",
+    "static/js/2.d6f8afb3.chunk.js",
     "static/css/main.01ec4fd4.chunk.css",
-    "static/js/main.4e4b9c8e.chunk.js"
+    "static/js/main.c972dd83.chunk.js"
   ]
 }
