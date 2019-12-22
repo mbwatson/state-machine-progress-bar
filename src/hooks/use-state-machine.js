@@ -13,13 +13,18 @@ export const useStateMachine = (initialState, stateFlow) => {
     const allActions = Object.values(stateFlow).reduce((allActions, s) => {
         return allActions.concat(Object.entries(s.on).map(([action, nextState]) => action)).removeDuplicates()
     }, [])
+
     return {
         state: currentState,
         flow: flow,
-        states: allStates,
-        actions: allActions,
-        availableStates: availableStates,
-        availableActions: availableActions,
+        states: {
+            all: allStates,
+            available: availableStates,
+        },
+        actions: {
+            all: allActions,
+            available: availableActions,
+        },
         transition: action => {
             if (availableStates !== []) {
                 if (flow[currentState].hasOwnProperty('on') && flow[currentState].on.hasOwnProperty(action)) {

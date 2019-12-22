@@ -79,12 +79,12 @@ export const Fsm = props => {
 
             <ActionButtonGroup>
                 {
-                    machine.actions.map(action => {
+                    machine.actions.all.map(action => {
                         return (
                             <ActionButton
                                 key={ action }
                                 onClick={ handleChangeState(action) }
-                                disabled={ DISABLE_UNAVAILABLE_ACTIONS && !machine.availableActions.includes(action) }
+                                disabled={ DISABLE_UNAVAILABLE_ACTIONS && !machine.actions.available.includes(action) }
                             >
                                 { action }
                             </ActionButton>
