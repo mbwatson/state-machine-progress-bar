@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { ProgressBar } from '../progress'
 import { States, StatesListItem } from './state-list'
 import { ActionButtonGroup, ActionButton } from './action-buttons'
-import { useStateMachine } from '../../hooks'
+import { useStateMachine } from '@mwatson/use-state-machine'
 
 const MachineWrapper = styled.div(
     ({ theme }) => `
